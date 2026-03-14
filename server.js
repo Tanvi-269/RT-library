@@ -12,21 +12,22 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname,"public")));
 
-/* MYSQL CONNECTION */
+const mysql = require("mysql2");
+
 const db = mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"tanvi",  // your mysql password
-    database:"libraryDB"
+  host: "switchyard.proxy.rlwy.net",
+  user: "root",
+  password: "EHqnkMLRGKeSOEweMuSGgkJHbnAUFxhH",
+  database: "railway",
+  port: 32313
 });
 
-db.connect(err=>{
-    if(err){
-        console.error("MySQL Connection Failed ❌");
-        console.error(err);
-        process.exit(1); // stop server if DB fails
-    } 
-    console.log("MySQL Connected ✅");
+db.connect((err) => {
+  if (err) {
+    console.log("Database connection failed:", err);
+  } else {
+    console.log("Connected to Railway MySQL");
+  }
 });
 
 /* ================= SIGNUP API ================= */
