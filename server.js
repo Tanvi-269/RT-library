@@ -15,11 +15,11 @@ app.use(express.static(path.join(__dirname,"public")));
 const mysql = require("mysql2");
 
 const db = mysql.createConnection({
-  host: "mysql.railway.internal",
+  host: "shuttle.proxy.rlwy.net",
   user: "root",
   password: "lQGdiFzVHKZDgRkRaiHLNnHfdxBKBShv",
   database: "railway",
-  port:3306
+  port:34863
 });
 
 db.connect((err) => {
