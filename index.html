@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RT KnowlwdgeHub Library</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+<h1><b>📚 RT KnowledgeHub Library</b></h1>
+<p>One powerful platform to manage books, members, and knowledge—faster, smarter, and completely digital.</p>
+</header>
+
+<nav>
+<a href="#" onclick="window.scrollTo(0,0)">Home</a>
+<a href="#about">About</a>
+<a href="#books">Books</a>
+<a href="#members">Members</a>
+<a href="#issue">Issue</a>
+<a href="#contact">Contact</a>
+</nav>
+
+<!-- HOME -->
+<section id="home">
+<div class="container">
+<div class="hero">
+<h1>Welcome to RT Hub</h1>
+<p>Smart & Secure Library Management System for Institutions</p>
+<ul>
+<li>✔ Book & Member Tracking</li>
+<li>✔ Issue & Return System</li>
+<li>✔ Secure Login</li>
+</ul>
+
+<div class="auth-btns" id="authArea">
+    <button class="signup-btn" onclick="openModal('signupModal')">Sign Up</button>
+    <button class="login-btn" onclick="openModal('loginModal')">Login</button>
+</div>
+
+<h3 id="userWelcome"></h3>
+<button onclick="logout()" id="logoutBtn" style="display:none">Logout</button>
+
+</div>
+</div>
+</section>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+<div class="modal-content">
+<span class="close" onclick="closeModal('loginModal')">&times;</span>
+<h2>Login</h2>
+<p style="font-size:13px;text-align:center;margin-top:10px">
+
+</p>
+
+<input type="text" id="loginUsername" placeholder="Username">
+<input id="loginPassword" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<span style="color:#007bff;cursor:pointer" onclick="forgotPassword()">
+Forgot Password?
+</span>
+</div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal" id="signupModal">
+  <div class="modal-content">
+
+    <span class="close" onclick="closeModal('signupModal')">&times;</span>
+
+    <h2>Create Library Account</h2>
+
+    <input id="fullName" placeholder="Full Name">
+
+    <!-- Contact Option -->
+    <select id="contactType">
+      <option value="email">Register with Email</option>
+      <option value="phone">Register with Phone</option>
+    </select>
+
+    <input id="contactValue" placeholder="Enter Email or Phone">
+
+    <select id="role">
+      <option value="">Select Role</option>
+      <option>Student</option>
+      <option>Faculty</option>
+    </select>
+
+    <input id="signupUser" placeholder="Username">
+
+    <input id="signupPass" type="password"
+      placeholder="Password (Min 8 chars, 1 Uppercase, 1 Special)">
+
+    <input id="confirmPass" type="password" placeholder="Confirm Password">
+
+    <label>
+      <input type="checkbox" id="terms">
+      I agree to Terms & Conditions
+    </label>
+
+    <button onclick="signup()">Create Account</button>
+
+  </div>
+</div>
+<!-- FORGOT PASSWORD MODAL -->
+<div class="modal" id="forgotModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('forgotModal')">&times;</span>
+
+    <h3>Reset Password</h3>
+
+    <input id="forgotUsername" placeholder="Enter Username">
+    <input id="newPassword" type="password"
+      placeholder="New Password">
+
+    <button onclick="resetPassword()">Reset Password</button>
+  </div>
+</div>
+
+<!-- BOOK DETAIL MODAL -->
+<div class="modal" id="bookDetailModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('bookDetailModal')">&times;</span>
+    <h2 id="detailTitle">Book Title</h2>
+    <p id="detailAuthor">Author: </p>
+    <p id="detailCategory"><b>Category:</b> </p>
+    <p id="detailPrice"><b>Price:</b> </p>
+    <p id="detailISBN"><b>ISBN:</b> </p>
+    <p id="detailYear"><b>Year:</b> </p>
+    <p id="detailStatus"><b>Status:</b> </p>
+    <p id="detailContent">Description goes here...</p>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+<div class="container">
+<h2 style="text-align:center">About the Library System</h2>
+
+<div class="about-grid">
+
+<!-- ABOUT LIBRARY -->
+<div class="about-box">
+<img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66">
+<div class="about-content">
+<h3>About the Library</h3>
+<p>
+The Library Management System is a modern, digital solution designed to manage
+library operations efficiently and securely. </p>
+<p>
+This system is suitable for schools, colleges, universities, and institutional
+libraries, providing fast access to information and reducing administrative workload.
+</p>
+</div>
+</div>
+
+<!-- OBJECTIVES -->
+<div class="about-box">
+<img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b">
+<div class="about-content">
+<h3>Objectives</h3>
+<ul>
+<li>Automate library operations</li>
+<li>Maintain accurate book & member records</li>
+<li>Reduce paperwork and errors</li>
+<li>Provide fast search and issue facilities</li>
+<li>Improve overall efficiency</li>
+</ul>
+</div>
+</div>
+
+<!-- FEATURES -->
+<div class="about-box">
+<img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353">
+<div class="about-content">
+<h3>Key Features</h3>
+<ul>
+<li>📘 Book Management</li>
+<li>👥 Member Management</li>
+<li>🔐 Secure Login & Registration</li>
+<li>🔄 Issue & Return Tracking</li>
+<li>📊 Digital Records</li>
+<li>💾 Local Storage Support</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- BOOKS -->
+<section id="books">
+<h2 style="margin-top:30px;text-align:center">Popular Books</h2>
+<div class="book-grid">
+
+<!-- BOOK 1 -->
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4">
+<div class="book-info">
+<h4>Python</h4>
+<p>Author: James Gosling</p>
+<div class="book-price">₹499</div>
+</div>
+</div>
+
+<!-- BOOK 2 -->
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc">
+<div class="book-info">
+<h4>Web Development</h4>
+<p>HTML, CSS & JS</p>
+<div class="book-price">₹399</div>
+</div>
+</div>
+
+<!-- BOOK 3 -->
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c">
+<div class="book-info">
+<h4>Data Structures</h4>
+<p>Computer Science</p>
+<div class="book-price">₹599</div>
+</div>
+</div>
+
+<!-- BOOK 4 -->
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1677442136019-21780ecad995">
+<div class="book-info">
+<h4>Artificial Intelligence</h4>
+<p>Machine Learning</p>
+<div class="book-price">₹699</div>
+</div>
+</div>
+
+</div>
+
+<div class="container">
+
+<div style="text-align:center;margin:30px 0">
+    <button onclick="toggleCollection()" 
+    style="padding:12px 25px;font-size:16px;font-weight:600;
+    background:#1e3c72;color:white;border:none;border-radius:6px;
+    cursor:pointer">
+        📚 Show Books Collection
+    </button>
+</div>
+<div id="collectionArea" style="display:none">
+
+<h2 style="text-align:center;margin-top:20px">Computer Science Books</h2>
+<div class="book-grid">
+
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1512820790803-83ca734da794">
+<div class="book-info">
+<h4>Data Structures</h4>
+<p>CS Faculty</p>
+<div class="book-price">₹550</div>
+</div>
+</div>
+
+<div class="book-card">
+<img src="https://m.media-amazon.com/images/I/81d6eZvFF2L._AC_UF1000,1000_QL80_.jpg" >
+<div class="book-info">
+<h4>Operating Systems</h4>
+<p>CS Faculty</p>
+<div class="book-price">₹620</div>
+</div>
+</div>
+
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1518770660439-4636190af475">
+<div class="book-info">
+<h4>Computer Networks</h4>
+<p>CS Faculty</p>
+<div class="book-price">₹580</div>
+</div>
+</div>
+
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd">
+<div class="book-info">
+<h4>Data Structures & Algorithms</h4>
+<p>CS Faculty</p>
+<div class="book-price">₹600</div>
+</div>
+</div>
+
+</div>
+
+<h2 style="text-align:center;margin-top:40px">IT Faculty Books</h2>
+<div class="book-grid">
+
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c">
+<div class="book-info">
+<h4>Web Technologies</h4>
+<p>IT Faculty</p>
+<div class="book-price">₹480</div>
+</div>
+</div>
+
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66">
+<div class="book-info">
+<h4>Software Engineering</h4>
+<p>IT Faculty</p>
+<div class="book-price">₹650</div>
+</div>
+</div>
+
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353">
+<div class="book-info">
+<h4>Operating System</h4>
+<p>IT Faculty</p>
+<div class="book-price">₹500</div>
+</div>
+</div>
+<div class="book-card">
+<img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d">
+<div class="book-info">
+<h4>Cloud Computing</h4>
+<p>IT Faculty</p>
+<div class="book-price">₹720</div>
+</div>
+</div>
+
+</div>
+</div>
+<!-- BOOK MANAGEMENT -->
+<div class="container" style="margin-top:20px;text-align:center">
+
+    <button onclick="toggleBookManagement()"
+    style="padding:12px 28px;font-size:16px;font-weight:600;
+    background:#28a745;color:white;border:none;border-radius:6px;
+    cursor:pointer">
+        ⚙ Book Management
+    </button>
+
+    <div id="bookManagementArea" style="display:none;margin-top:25px">
+
+        <!-- BOOK MANAGEMENT CONTENT -->
+<div class="card">
+
+<h2 style="text-align:center">Book Management Panel</h2>
+
+<!-- ACTION BUTTONS -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:12px;margin-bottom:20px">
+
+<button onclick="showAddBook()"
+style="background:#28a745;color:white;padding:8px 15px;border:none;border-radius:5px;">
+    ➕ Add Book
+</button>
+
+<button onclick="deleteSelectedBook()"
+style="background:#dc3545;color:white;padding:8px 15px;border:none;border-radius:5px;margin-left:10px;">
+    🗑 Delete Selected
+</button>
+
+<button onclick="viewBooks()"
+style="background:#007bff;color:white;padding:8px 15px;border:none;border-radius:5px;margin-left:10px;">
+    📚 View Books
+</button>
+</div>
+
+<!-- ADD BOOK SECTION -->
+<div id="addBookSection" style="display:none;">
+
+    <div class="add-book-container">
+
+        <!-- LEFT SIDE : FORM -->
+        <div class="add-book-form">
+            <h3>Add New Book</h3>
+
+            <input type="text" id="bookName" placeholder="Book Title">
+<input type="text" id="bookAuthor" placeholder="Author">
+<input type="text" id="bookCategory" placeholder="Category">
+<input type="text" id="bookISBN" placeholder="ISBN">
+<input type="number" id="bookYear" placeholder="Year">
+
+
+           <button class="save-btn" onclick="saveBookToDatabase()">
+    💾 Save Book
+</button>
+
+        </div>
+
+        <!-- RIGHT SIDE : GUIDELINES -->
+        <div class="add-book-guidelines">
+            <div class="guidelines-content">
+                <h3>📘 Add Book Guidelines</h3>
+                <ul>
+                    <li>Book title must not be empty</li>
+                    <li>Author name should be valid</li>
+                    <li>Category is required</li>
+                    <li>ISBN must be unique</li>
+                    <li>Year should be valid</li>
+                    <li>Check details before saving</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- VIEW BOOKS SECTION -->
+<div id="viewBooksSection" style="display:none; margin-top:20px;">
+
+    <h3>📚 Book Collection</h3>
+
+    <ul id="viewBooksList" 
+        style="background:#f8f9fa;padding:15px;border-radius:8px;list-style:none;">
+    </ul>
+
+</div>
+
+
+<!-- BOOK TABLE -->
+ <div id="bookTableSection" style="display:none; ">
+<div style="overflow-x:auto;margin-top:15px">
+<table>
+<thead>
+<tr>
+<th>Select</th>
+<th>Book Name</th>
+<th>Author/Faculty</th>
+<th>Category</th>
+<th>ISBN</th>
+<th>Year</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="bookMgmtTable"></tbody>
+</table>
+</div>
+</div>
+<p style="margin-top:12px;font-size:14px;color:#555">
+All books added from <b>Add Book</b> will appear here automatically.
+</p>
+
+</div>
+
+            <p style="margin-top:15px;color:#555;font-size:14px">
+                Manage library books: add new books, delete records, view all books, or search quickly.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+
+</div>
+</div>
+</section>
+
+<!-- MEMBERS -->
+<section id="members">
+<div class="container">
+
+<!-- BOX 1 -->
+<div class="member-box">
+    <div class="member-box-header" >
+        <h3>About Members Module</h3>
+    </div>
+    <div class="member-box-content">
+        <p>
+        The Members Module manages registered users such as students, faculty,
+        and librarians, ensuring secure and organized access to library resources.
+        </p>
+    </div>
+
+</div>
+
+<!-- BOX 2 -->
+<div class="member-box">
+    <div class="member-box-header" >
+        <h3>Types of Library Members</h3>
+            </div>
+    <div class="member-box-content">
+        <ul>
+            <li><b>Students:</b> Issue and return books</li>
+            <li><b>Faculty:</b> Extended borrowing access</li>
+            <li><b>Librarian:</b> Full control of system</li>
+        </ul>
+    </div>
+
+
+</div>
+
+
+<!-- BOX 4 -->
+<div class="member-box">
+    <div class="member-box-header" >
+        <h3>Member Rules & Policies</h3>
+            </div>
+    <div class="member-box-content">
+        <ul>
+            <li>Only active members can issue books</li>
+            <li>ID is mandatory</li>
+            <li>Lost books must be replaced</li>
+        </ul>
+    </div>
+
+
+</div>
+
+
+
+
+    </div>
+</div>
+
+</div>
+</section>
+
+<!-- ISSUE -->
+<section id="issue">
+<div class="container">
+
+<h2 style="text-align:center">📕 Issue & Return Book System</h2>
+
+<div class="issue-desc">
+<p>
+<b>
+This module allows registered members to issue and return library books
+in a controlled and transparent manner. Select the required action below
+to proceed with issuing or returning a book.
+</b>
+</p>
+</div>
+
+<!-- MAIN ACTION BUTTONS -->
+<div class="issue-actions">
+
+<!-- ISSUE BUTTON CARD -->
+<div class="issue-btn-card" style="background:#28a745">
+<h3>📘 Issue Book</h3>
+
+<p style="font-size:14px;line-height:1.6">
+Issue books only from the available library collection.  
+Each issued book is recorded with issue and due dates
+for proper tracking and accountability.
+</p>
+
+<button onclick="showIssueForm()">Proceed to Issue</button>
+
+<!-- ISSUE FORM -->
+<div id="issueForm" style="display:none;margin-top:15px">
+<select id="issueBook">
+    <option value="" disabled selected>📘 Select Book</option>
+</select>
+
+
+<input type="date" id="issueDate" placeholder="Issue Date">
+<input type="date" id="dueDate" placeholder="Due Date">
+<button onclick="issueSelectedBook()">Confirm Issue</button>
+
+<!-- ISSUE RECORD -->
+<table style="margin-top:15px;background:white;color:black">
+<thead>
+<tr>
+<th>Book</th>
+<th>Issue Date</th>
+<th>Due Date</th>
+</tr>
+</thead>
+<tbody id="issuedBooksTable"></tbody>
+</table>
+</div>
+</div>
+
+<!-- RETURN BUTTON CARD -->
+<div class="issue-btn-card" style="background:#007bff">
+<h3>🔄 Return Book</h3>
+
+<p style="font-size:14px;line-height:1.6">
+Return only those books that were previously issued
+from the library collection. Returned records help
+maintain accurate library inventory.
+</p>
+
+<button onclick="showReturnForm()">Proceed to Return</button>
+
+<!-- RETURN FORM -->
+<div id="returnForm" style="display:none;margin-top:15px">
+<select id="returnBook">
+    <option value="" disabled selected>📕 Select Issued Book</option>
+</select>
+
+<input type="date" id="returnDate" placeholder="Return Date">
+<button onclick="returnSelectedBook()">Confirm Return</button>
+
+<!-- RETURN RECORD -->
+<table style="margin-top:15px;background:white;color:black">
+<thead>
+<tr>
+<th>Book</th>
+<th>Return Date</th>
+</tr>
+</thead>
+<tbody id="returnedBooksTable"></tbody>
+</table>
+</div>
+</div>
+
+</div>
+</section>
+<!-- CONTACT -->
+<section id="contact">
+
+<!-- MAIN CONTACT TITLE -->
+<h1 style="
+    text-align:center;
+    margin-bottom:30px;
+    color:#1e3c72;
+    font-size:32px;
+">
+📬 Contact Us
+</h1>
+
+<div class="container">
+   
+<!-- CONTACT DETAILS -->
+<div class="card">
+<h2 style="text-align:center">📞 Contact Information</h2>
+
+
+<ul style="list-style:none;line-height:1.9;font-size:15px">
+<li>📍 <b>Library Address:</b> RT KnowledgeHub Library
+2627 Knowledge Avenue, Academic Campus,
+Cityville, State – 500001, India</li>
+<li>📞 <b>Contact Number:</b> +91 8010695885</li>
+<li>📧 <b>Email:</b> digitallibrary67@gmail.com </li>
+<li>🕘 <b>Library Hours:</b> Monday – Saturday | 9:00 AM – 6:00 PM</li>
+<li>👤 <b>Librarian:</b> Library Administrator</li>
+</ul>
+
+<p style="margin-top:10px;color:#555">
+For book availability, membership, issue/return queries, or technical support,
+please use the contact details above or submit the form below.
+</p>
+</div>
+
+<!-- RESPONSE / SUBMISSION FORM -->
+<div class="card">
+<h2 style="text-align:center">📝 Contact / Feedback Form</h2>
+
+
+<p style="color:#555;margin-bottom:10px">
+Submit your query or feedback. Our library team will respond during working hours.
+</p>
+
+<form onsubmit="submitContactForm(event)">
+<input type="text" id="contactName" placeholder="Full Name" required>
+<input type="email" id="contactEmail" placeholder="Email Address" required>
+
+<select id="contactQueryType">
+<option value="">Select Query Type</option>
+<option>Book Availability</option>
+<option>Membership</option>
+<option>Issue / Return</option>
+<option>Technical Issue</option>
+<option>Feedback / Suggestion</option>
+</select>
+
+<textarea id="contactMessage"
+placeholder="Write your message here..."
+style="width:100%;padding:10px;margin:6px 0;height:110px"
+required></textarea>
+
+<button type="submit" style="background:#1e3c72;color:white;font-weight:600">
+Submit Request
+</button>
+
+<p id="contactResponse"
+style="margin-top:10px;font-size:14px;color:green;display:none">
+✔ Thank you! Your message has been submitted successfully.
+</p>
+
+</form>
+</div>
+
+</div>
+</section>
+<footer class="site-footer">
+<div class="footer-container">
+
+    <!-- LEFT: LMS TITLE -->
+    <div class="footer-left">
+        <h2>📚 RT KnowledgeHub </h2>
+        <p>
+            A smart and secure digital solution designed to manage
+            library resources, members, and book transactions efficiently.
+        </p>
+    </div>
+
+    <!-- MIDDLE: IMPORTANT LINKS -->
+    <div class="footer-links">
+        <h3>Important Links</h3>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#books">Books</a></li>
+            <li><a href="#members">Members</a></li>
+            <li><a href="#issue">Issue / Return</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- RIGHT: OTHER LINKS + AI TOOLS -->
+    <div class="footer-links">
+        <h3 style="margin-top:15px">AI Tools Used</h3>
+        <ul>
+  <li>ChatGPT – Code & Logic Assistance</li>
+  <li>AI UI/UX Design Support</li>
+  <li>AI Content & Documentation Help</li>
+</ul>
+    </div>
+
+</div>
+
+<div class="footer-bottom">
+    © 2026 Digital Library System | All Rights Reserved
+</div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
