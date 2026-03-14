@@ -2,7 +2,7 @@
 // ================= GLOBAL DATA =================
 let selectedBookId = null;
 let selectedBookIndex = null;
-
+const API_BASE = "https://rt-library.onrender.com";
 function openModal(id){
     document.getElementById(id).style.display="flex";
 }
@@ -40,7 +40,7 @@ async function signup() {
 
     try {
 
-        const response = await fetch("/signup", {
+        const response = await fetch(API_BASE + "/signup", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -77,7 +77,7 @@ async function login() {
     }
 
     try {
-        const response = await fetch("/login", {
+        const response = await fetch(API_BASE +"/login", {
 
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -120,7 +120,7 @@ async function resetPassword() {
     const username = document.getElementById("forgotUsername").value;
     const newPassword = document.getElementById("newPassword").value;
 
-    const response = await fetch("/reset-password", {
+    const response = await fetch(API_BASE +"/reset-password", {
 
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -182,7 +182,7 @@ async function syncCollectionToDatabase() {
         if (!title) continue;
 
         try {
-            await fetch("/add-book-if-not-exists", {
+            await fetch(API_BASE +"/add-book-if-not-exists", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -206,7 +206,7 @@ async function syncCollectionToDatabase() {
 async function loadBooksFromDatabase() {
 
     try {
-        const res = await fetch("/books");
+        const res = await fetch(API_BASE +"/books");
         const books = await res.json();
 
         const table = document.getElementById("bookMgmtTable");
@@ -253,7 +253,7 @@ function deleteSelectedBook() {
         return;
     }
 
-    fetch("/delete-book/" + selectedBookId, {
+    fetch(API_BASE +"/delete-book/" + selectedBookId, {
         method: "DELETE"
     })
     .then(res => res.json())
@@ -286,7 +286,7 @@ async function saveBookToDatabase() {
 
     try {
 
-        const response = await fetch("/add-book", {
+        const response = await fetch(API_BASE +"/add-book", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -334,7 +334,7 @@ async function viewBooks() {
 
     try {
 
-        const response = await fetch("/books");
+        const response = await fetch(API_BASE +"/books");
         const books = await response.json();
 
         const available = books.filter(b => b.status === "Available");
@@ -409,7 +409,7 @@ function showAddBook() {
 
 function loadBooksToIssueDropdown() {
 
-    fetch("/books")
+    fetch(API_BASE +"/books")
     .then(res => res.json())
     .then(data => {
 
@@ -446,7 +446,7 @@ async function issueSelectedBook(){
 
     try{
 
-        const response = await fetch("/issue-book", {
+        const response = await fetch(API_BASE +"/issue-book", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -486,7 +486,7 @@ function displaySingleIssuedBook(title, issueDate, dueDate){
 
 function loadIssuedBooksToReturnDropdown(){
 
-fetch("/issued-books")
+fetch(API_BASE +"/issued-books")
 .then(res => res.json())
 .then(data => {
 
@@ -508,7 +508,7 @@ fetch("/issued-books")
 async function loadIssuedBooksTable(){
 
     try{
-        const res = await fetch("/issued-books");
+        const res = await fetch(API_BASE +"/issued-books");
         const books = await res.json();
 
         const table = document.getElementById("issuedBooksTable");
@@ -548,7 +548,7 @@ async function returnSelectedBook(){
 
     try{
 
-        const response = await fetch("/return-book", {
+        const response = await fetch(API_BASE +"/return-book", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -588,7 +588,7 @@ function displaySingleReturnedBook(title, returnDate){
 async function loadReturnedBooksTable(){
 
     try{
-        const res = await fetch("/returned-books");
+        const res = await fetch(API_BASE +"/returned-books");
         const books = await res.json();
 
         const table = document.getElementById("returnedBooksTable");
@@ -636,7 +636,7 @@ function submitContactForm(e){
     const queryType = document.getElementById("contactQueryType").value;
     const message = document.getElementById("contactMessage").value;
 
-    fetch("/contact", {
+    fetch(API_BASE +"/contact", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
