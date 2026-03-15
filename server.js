@@ -17,7 +17,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  port: Number(process.env.DB_PORT)
 });
 
 db.connect((err) => {
@@ -139,21 +139,26 @@ app.post("/add-book", (req, res) => {
 
     const { title, author, category, isbn, year, status } = req.body;
 
+    if(!title || !author){
+        return res.status(400).json({message:"Title and Author required"});
+    }
+
     const sql = `
         INSERT INTO books (title, author, category, isbn, year, status)
         VALUES (?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [title, author, category, isbn, year, status], (err) => {
+    db.query(sql, [title, author, category, isbn, year, status], (err,result) => {
+
         if (err) {
-            console.log(err);
-            return res.json({ message: "Error saving book" });
+            console.log("ADD BOOK ERROR:",err);
+            return res.status(500).json({ message: "Database insert failed" });
         }
 
         res.json({ message: "Book added successfully!" });
+
     });
 
-});
 
 
 /* ================= GET ALL BOOKS ================= */
@@ -208,24 +213,34 @@ app.post("/add-book-if-not-exists", (req, res) => {
 
     const { title, author, category, isbn, year, status } = req.body;
 
-    db.query(
-        "SELECT * FROM books WHERE title = ?",
-        [title],
-        (err, result) => {
+    if(!title){
+        return res.status(400).json({message:"Title required"});
+    }
 
-            if (result.length > 0) {
-                return res.json({ message: "Already exists" });
+    db.query(
+        "SELECT id FROM books WHERE title=?",
+        [title],
+        (err,result)=>{
+
+            if(err){
+                console.log(err);
+                return res.status(500).json({message:"DB error"});
+            }
+
+            if(result.length>0){
+                return res.json({message:"Already exists"});
             }
 
             db.query(
-                "INSERT INTO books (title, author, category, isbn, year, status) VALUES (?, ?, ?, ?, ?, ?)",
-                [title, author, category, isbn, year, status],
-                (err2) => {
-                    if (err2) {
-                        res.status(500).json({ message: "Insert failed" });
-                    } else {
-                        res.json({ message: "Book added from collection" });
+                "INSERT INTO books(title,author,category,isbn,year,status) VALUES (?,?,?,?,?,?)",
+                [title,author,category,isbn,year,status],
+                (err2)=>{
+                    if(err2){
+                        console.log(err2);
+                        return res.status(500).json({message:"Insert failed"});
                     }
+
+                    res.json({message:"Book added"});
                 }
             );
         }
@@ -373,13 +388,15 @@ app.post("/contact", (req, res) => {
         }
 
         // 2️⃣ Send Email TO USER
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: "digitallibrary67@gmail.com",
-                pass: "kaagozeyygncpggw"
-            }
-        });
+       const transporter = nodemailer.createTransport({
+host:"smtp.gmail.com",
+port:587,
+secure:false,
+auth:{
+user:"digitallibrary67@gmail.com",
+pass:"kaagozeyygncpggw"
+}
+});
 
         const mailOptions = {
             from: "digitallibrary67@gmail.com",
