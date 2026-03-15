@@ -389,10 +389,11 @@ app.post("/contact", (req, res) => {
 
         // 2️⃣ Send Email TO USER
        const transporter = nodemailer.createTransport({
-auth:{
-user:"digitallibrary67@gmail.com",
-pass:"amocnuaanksvxyyr"
-}
+  service: "gmail",
+  auth: {
+    user: "digitallibrary67@gmail.com",
+    pass: "amocnuaanksvxyyr"
+  }
 });
 
         const mailOptions = {
