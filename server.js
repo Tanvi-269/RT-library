@@ -160,7 +160,7 @@ app.post("/add-book", (req, res) => {
     });
 
 
-
+});
 /* ================= GET ALL BOOKS ================= */
 
 app.get("/books", (req, res) => {
@@ -394,7 +394,7 @@ port:587,
 secure:false,
 auth:{
 user:"digitallibrary67@gmail.com",
-pass:"kaagozeyygncpggw"
+pass:"amocnuaanksvxyyr"
 }
 });
 
