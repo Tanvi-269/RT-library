@@ -389,9 +389,6 @@ app.post("/contact", (req, res) => {
 
         // 2️⃣ Send Email TO USER
        const transporter = nodemailer.createTransport({
-host:"smtp.gmail.com",
-port:587,
-secure:false,
 auth:{
 user:"digitallibrary67@gmail.com",
 pass:"amocnuaanksvxyyr"
@@ -416,14 +413,17 @@ pass:"amocnuaanksvxyyr"
             `
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+       transporter.sendMail(mailOptions, (error, info) => {
 
-            if (error) {
-                console.log(error);
-                return res.status(500).json({ message: "Email failed" });
-            }
+    if (error) {
+        console.log("EMAIL ERROR:", error);
+        return res.status(500).json({ message: "Email failed" });
+    }
 
-            res.json({ message: "Request submitted and email sent to user" });
+    console.log("EMAIL SENT:", info.response);
+
+    res.json({ message: "Request submitted and email sent to user" });
+
 
         });
 
