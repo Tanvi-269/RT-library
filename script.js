@@ -310,7 +310,8 @@ async function saveBookToDatabase() {
         document.getElementById("bookYear").value = "";
 
         document.getElementById("bookTableSection").style.display = "block";
-        loadBooksFromDatabase();
+       loadBooksFromDatabase();
+        loadBooksToIssueDropdown();
 
 
     } catch (error) {
@@ -418,7 +419,7 @@ function loadBooksToIssueDropdown() {
             "<option value='' disabled selected>📘 Select Book</option>";
 
         data.forEach(book => {
-            if (book.status === "Available") {
+            if (book.status === "Available" || book.status === null) {
                 issueSelect.innerHTML +=
                     `<option value="${book.title}">
                         ${book.title}
@@ -665,16 +666,16 @@ function submitContactForm(e){
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+
 syncCollectionToDatabase();
-    
-    loadBooksToIssueDropdown();
+
+loadBooksToIssueDropdown();
 loadIssuedBooksToReturnDropdown();
 
+loadIssuedBooksTable();
+loadReturnedBooksTable();
 
-
-    window.location.hash = "#home";
-    document.getElementById("home").scrollIntoView();
-
-
+window.location.hash = "#home";
+document.getElementById("home").scrollIntoView();
 
 });
