@@ -8,11 +8,16 @@ const nodemailer = require("nodemailer");
 
 
 const app = express();
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type"]
-}));
+const corsOptions = {
+    origin: "https://tanvi-269.github.io", // your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type"]
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests for all routes
+app.options("*", cors(corsOptions));
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname,"public")));
