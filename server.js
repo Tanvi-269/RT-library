@@ -394,10 +394,8 @@ console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
 }
 
         // 2️⃣ Send Email TO USER
-       const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+      const transporter = nodemailer.createTransport({
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
