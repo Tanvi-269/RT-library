@@ -442,7 +442,29 @@ console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
     });
 
 });
+app.get("/test-email", async (req, res) => {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        }
+    });
 
+    try {
+        await transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER,
+            subject: "Test Email",
+            text: "Working ✅"
+        });
+
+        res.send("Email sent ✅");
+    } catch (err) {
+        console.log(err);
+        res.send("Email failed ❌");
+    }
+});
 /* ================= START SERVER ================= */
 
 const PORT = process.env.PORT || 3000;
