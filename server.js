@@ -400,9 +400,13 @@ app.post("/contact", (req, res) => {
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    family: 4   // 🔥 FORCE IPv4 (THIS FIXES YOUR ERROR)
   }
 });
         try {
@@ -442,13 +446,17 @@ app.get("/test-email", async (req, res) => {
 
     console.log("Testing email...");
 
-    const transporter = nodemailer.createTransport({
+      const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    family: 4   // 🔥 FORCE IPv4 (THIS FIXES YOUR ERROR)
   }
 });
     try {
