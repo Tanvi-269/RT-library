@@ -459,10 +459,13 @@ app.get("/test-email", async (req, res) => {
         console.log("✅ EMAIL SENT");
         res.send("Email sent ✅");
 
-    } catch (err) {
-        console.log("❌ EMAIL ERROR:", err);
-        res.send("Email failed ❌");
-    }
+    } catch (error) {
+    console.log("❌ EMAIL ERROR FULL:", error);  // 👈 ADD THIS LINE
+
+    res.json({
+        message: "Saved but email failed"
+    });
+}
 });
 /* ================= START SERVER ================= */
 
