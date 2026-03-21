@@ -667,7 +667,7 @@ function submitContactForm(e){
 
 window.addEventListener("DOMContentLoaded", () => {
 
-syncCollectionToDatabase();
+
 
 loadBooksToIssueDropdown();
 loadIssuedBooksToReturnDropdown();
