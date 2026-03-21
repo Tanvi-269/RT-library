@@ -382,10 +382,10 @@ app.post("/contact", (req, res) => {
 
     db.query(sql, [name, email, queryType, message], (err) => {
 
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ message: "Database error" });
-        }
+       if (err) {
+    console.log("❌ DB ERROR:", err);
+    return res.status(500).json({ message: "Database error" });
+}
 
         // 2️⃣ Send Email TO USER
        const transporter = nodemailer.createTransport({
@@ -417,13 +417,19 @@ app.post("/contact", (req, res) => {
       transporter.sendMail(mailOptions, (error, info) => {
 
     if (error) {
-        console.log("❌ EMAIL ERROR FULL:", error);
-        return res.status(500).json({ message: "Email failed" });
+        console.log("❌ EMAIL ERROR:", error);
+
+        // DON'T FAIL API
+        return res.json({
+            message: "Saved but email failed"
+        });
     }
 
-    console.log("✅ EMAIL SUCCESS:", info);
+    console.log("✅ EMAIL SENT:", info.response);
 
-    res.json({ message: "Request submitted and email sent to user" });
+    res.json({
+        message: "Request submitted & email sent"
+    });
 
 });
 
