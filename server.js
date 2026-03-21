@@ -395,7 +395,9 @@ console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
 
         // 2️⃣ Send Email TO USER
       const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // VERY IMPORTANT
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -420,23 +422,7 @@ console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
             `
         };
 
-      transporter.sendMail(mailOptions, (error, info) => {
-
-    if (error) {
-        console.log("❌ EMAIL ERROR:", error);
-
-        // DON'T FAIL API
-        return res.json({
-            message: "Saved but email failed"
-        });
-    }
-
-    console.log("✅ EMAIL SENT:", info.response);
-
-    res.json({
-        message: "Request submitted & email sent"
-    });
-
+     
 });
 
     });
