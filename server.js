@@ -396,12 +396,14 @@ app.post("/contact", (req, res) => {
 
         // 2️⃣ Send Email
         const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // MUST be false
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
         try {
             await transporter.sendMail({
@@ -421,9 +423,7 @@ app.post("/contact", (req, res) => {
 
             console.log("✅ EMAIL SENT");
 
-            res.json({
-                message: "Request submitted & email sent"
-            });
+           res.send("Email failed ❌");
 
         } catch (error) {
             console.log("❌ EMAIL ERROR:", error);
