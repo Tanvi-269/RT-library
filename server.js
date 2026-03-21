@@ -3,6 +3,7 @@ const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config();
 const nodemailer = require("nodemailer");
 
 
@@ -395,17 +396,13 @@ app.post("/contact", (req, res) => {
         }
 
         // 2️⃣ Send Email
-       const transporter = nodemailer.createTransport({
+      const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
     }
 });
-
         try {
             await transporter.sendMail({
                 from: process.env.EMAIL_USER,
