@@ -7,7 +7,11 @@ const nodemailer = require("nodemailer");
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type"]
+}));
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname,"public")));
@@ -370,6 +374,8 @@ app.post("/contact", (req, res) => {
 
     const { name, email, queryType, message } = req.body;
 
+    console.log("EMAIL USER:", process.env.EMAIL_USER);
+console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
     if (!name || !email || !message) {
         return res.status(400).json({ message: "All fields required" });
     }
@@ -389,7 +395,9 @@ app.post("/contact", (req, res) => {
 
         // 2️⃣ Send Email TO USER
        const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
