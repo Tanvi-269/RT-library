@@ -17,7 +17,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Handle preflight requests for all routes
-app.options("*", cors(corsOptions));
+// ✅ Correct way to handle preflight for all routes
+app.use((req, res, next) => {
+    if (req.method === "OPTIONS") {
+        res.header("Access-Control-Allow-Origin", corsOptions.origin);
+        res.header("Access-Control-Allow-Methods", corsOptions.methods.join(","));
+        res.header("Access-Control-Allow-Headers", corsOptions.allowedHeaders.join(","));
+        return res.sendStatus(204); // No content
+    }
+    next();
+});
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname,"public")));
