@@ -375,7 +375,8 @@ app.post("/contact", (req, res) => {
     const { name, email, queryType, message } = req.body;
 
     console.log("EMAIL USER:", process.env.EMAIL_USER);
-console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
+    console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
+
     if (!name || !email || !message) {
         return res.status(400).json({ message: "All fields required" });
     }
@@ -386,70 +387,54 @@ console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
         VALUES (?, ?, ?, ?)
     `;
 
-    db.query(sql, [name, email, queryType, message], (err) => {
+    db.query(sql, [name, email, queryType, message], async (err) => {
 
-       if (err) {
-    console.log("❌ DB ERROR:", err);
-    return res.status(500).json({ message: "Database error" });
-}
-
-        // 2️⃣ Send Email TO USER
-      const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // VERY IMPORTANT
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,   // 🔥 THIS SENDS TO USER
-            subject: "Library Contact Confirmation",
-            html: `
-                <h2>Thank You for Contacting Digital Library 📚</h2>
-                <p>Dear ${name},</p>
-                <p>We have received your request regarding:</p>
-                <p><b>${queryType}</b></p>
-                <p>Your message:</p>
-                <p>"${message}"</p>
-                <br>
-                <p>Our team will contact you soon.</p>
-                <br>
-                <p>Regards,<br>Digital Library Team</p>
-            `
-        };
-
-     
-});
-
-    });
-
-});
-app.get("/test-email", async (req, res) => {
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
+        if (err) {
+            console.log("❌ DB ERROR:", err);
+            return res.status(500).json({ message: "Database error" });
         }
-    });
 
-    try {
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER,
-            subject: "Test Email",
-            text: "Working ✅"
+        // 2️⃣ Send Email
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
         });
 
-        res.send("Email sent ✅");
-    } catch (err) {
-        console.log(err);
-        res.send("Email failed ❌");
-    }
+        try {
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: "Library Contact Confirmation",
+                html: `
+                    <h2>Thank You for Contacting Digital Library 📚</h2>
+                    <p>Dear ${name},</p>
+                    <p>We received your query:</p>
+                    <b>${queryType}</b>
+                    <p>${message}</p>
+                    <br>
+                    <p>We will contact you soon.</p>
+                `
+            });
+
+            console.log("✅ EMAIL SENT");
+
+            res.json({
+                message: "Request submitted & email sent"
+            });
+
+        } catch (error) {
+            console.log("❌ EMAIL ERROR:", error);
+
+            res.json({
+                message: "Saved but email failed"
+            });
+        }
+
+    });
+
 });
 /* ================= START SERVER ================= */
 
