@@ -397,7 +397,7 @@ app.post("/contact", (req, res) => {
 });
 
         const mailOptions = {
-            from: "digitallibrary67@gmail.com",
+            from: process.env.EMAIL_USER,
             to: email,   // 🔥 THIS SENDS TO USER
             subject: "Library Contact Confirmation",
             html: `
@@ -414,19 +414,18 @@ app.post("/contact", (req, res) => {
             `
         };
 
-       transporter.sendMail(mailOptions, (error, info) => {
+      transporter.sendMail(mailOptions, (error, info) => {
 
     if (error) {
-        console.log("EMAIL ERROR:", error);
+        console.log("❌ EMAIL ERROR FULL:", error);
         return res.status(500).json({ message: "Email failed" });
     }
 
-    console.log("EMAIL SENT:", info.response);
+    console.log("✅ EMAIL SUCCESS:", info);
 
     res.json({ message: "Request submitted and email sent to user" });
 
-
-        });
+});
 
     });
 
