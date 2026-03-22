@@ -4,7 +4,11 @@ const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
-const nodemailer = require("nodemailer");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
+const client = SibApiV3Sdk.ApiClient.instance;
+const apiKey = client.authentications["api-key"];
+
+apiKey.apiKey = process.env.BREVO_PASS;
 
 
 const app = express();
@@ -409,82 +413,41 @@ app.post("/contact", (req, res) => {
             return res.status(500).json({ message: "Database error" });
         }
 
-        // 2️⃣ Send Email
-      const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: "a5aad3001@smtp-brevo.com", // from your screenshot
-    pass: process.env.BREVO_PASS
+        const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
+
+const sender = {
+  email: "libraryhub76@brevo.com",
+  name: "Digital Library"
+};
+
+const receivers = [
+  {
+    email: email
   }
-});
-        try {
-            await transporter.sendMail({
-               from: "libraryhub76@gmail.com",
-                to: email,
-                subject: "Library Contact Confirmation",
-                html: `
-                    <h2>Thank You for Contacting Digital Library 📚</h2>
-                    <p>Dear ${name},</p>
-                    <p>We received your query:</p>
-                    <b>${queryType}</b>
-                    <p>${message}</p>
-                    <br>
-                    <p>We will contact you soon.</p>
-                `
-            });
+];
 
-            console.log("✅ EMAIL SENT");
+try {
+  await emailApi.sendTransacEmail({
+    sender,
+    to: receivers,
+    subject: "Library Contact Confirmation",
+    htmlContent: `
+      <h2>Thank You for Contacting Digital Library 📚</h2>
+      <p>Dear ${name},</p>
+      <p>We received your query:</p>
+      <b>${queryType}</b>
+      <p>${message}</p>
+      <br>
+      <p>We will contact you soon.</p>
+    `
+  });
 
-           res.json({
-    message: "Request submitted & email sent"
-});
+  res.json({ message: "Email sent successfully ✅" });
 
-        } catch (error) {
-            console.log("❌ EMAIL ERROR:", error);
-
-            res.json({
-                message: "Saved but email failed"
-            });
-        }
-
-    });
-
-});
-app.get("/test-email", async (req, res) => {
-
-    console.log("Testing email...");
-
-    const transporter = nodemailer.createTransport({
-        host: "smtp-relay.brevo.com",
-        port: 587,
-        secure: false,
-        auth: {
-            user: "a5aad3001@smtp-brevo.com",
-            pass: process.env.BREVO_PASS
-        }
-    });
-
-    try {
-        await transporter.sendMail({
-            from: "libraryhub76@gmail.com",
-            to: "digitallibrary67@gmail.com", // send to yourself
-            subject: "Test Email",
-            text: "Brevo Working ✅"
-        });
-
-        console.log("✅ EMAIL SENT");
-        res.send("Email sent ✅");
-
-    } catch (error) {
-        console.log("❌ EMAIL ERROR FULL:", error);
-
-        res.json({
-            message: "Email failed"
-        });
-    }
-});
+} catch (error) {
+  console.log("❌ BREVO ERROR:", error);
+  res.json({ message: "Saved but email failed" });
+}
 /* ================= START SERVER ================= */
 
 const PORT = process.env.PORT || 3000;
