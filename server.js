@@ -393,14 +393,11 @@ app.post("/contact", (req, res) => {
 
     const { name, email, queryType, message } = req.body;
 
-    console.log("EMAIL USER:", process.env.EMAIL_USER);
-    console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
-
     if (!name || !email || !message) {
         return res.status(400).json({ message: "All fields required" });
     }
 
-    // 1️⃣ Save to Database
+    // 1️⃣ Save to DB
     const sql = `
         INSERT INTO contact_messages (name, email, query_type, message)
         VALUES (?, ?, ?, ?)
@@ -413,41 +410,45 @@ app.post("/contact", (req, res) => {
             return res.status(500).json({ message: "Database error" });
         }
 
+        // 2️⃣ Send Email using Brevo SDK
         const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
 
-const sender = {
-  email: "libraryhub76@brevo.com",
-  name: "Digital Library"
-};
+        const sender = {
+            email: "libraryhub76@brevo.com",  // must be verified in Brevo
+            name: "Digital Library"
+        };
 
-const receivers = [
-  {
-    email: email
-  }
-];
+        const receivers = [
+            { email: email } // user email
+        ];
 
-try {
-  await emailApi.sendTransacEmail({
-    sender,
-    to: receivers,
-    subject: "Library Contact Confirmation",
-    htmlContent: `
-      <h2>Thank You for Contacting Digital Library 📚</h2>
-      <p>Dear ${name},</p>
-      <p>We received your query:</p>
-      <b>${queryType}</b>
-      <p>${message}</p>
-      <br>
-      <p>We will contact you soon.</p>
-    `
-  });
+        try {
+            await emailApi.sendTransacEmail({
+                sender: sender,
+                to: receivers,
+                subject: "Library Contact Confirmation",
+                htmlContent: `
+                    <h2>Thank You for Contacting Digital Library 📚</h2>
+                    <p>Dear ${name},</p>
+                    <p>We received your query:</p>
+                    <b>${queryType}</b>
+                    <p>${message}</p>
+                `
+            });
 
-  res.json({ message: "Email sent successfully ✅" });
+            console.log("✅ EMAIL SENT");
 
-} catch (error) {
-  console.log("❌ BREVO ERROR:", error);
-  res.json({ message: "Saved but email failed" });
-}
+            res.json({ message: "Saved & Email sent ✅" });
+
+        } catch (error) {
+            console.log("❌ BREVO ERROR:", error);
+
+            res.json({ message: "Saved but email failed ❌" });
+        }
+
+    }); // ✅ DB query closed
+
+}); // ✅ API closed
 /* ================= START SERVER ================= */
 
 const PORT = process.env.PORT || 3000;
