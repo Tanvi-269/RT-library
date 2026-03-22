@@ -411,21 +411,17 @@ app.post("/contact", (req, res) => {
 
         // 2️⃣ Send Email
       const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
-  requireTLS: true,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    family: 4   // 🔥 FORCE IPv4 (THIS FIXES YOUR ERROR)
+    user: "a5aad3001@smtp-brevo.com", // from your screenshot
+    pass: process.env.BREVO_PASS
   }
 });
         try {
             await transporter.sendMail({
-                from: process.env.EMAIL_USER,
+               from: "libraryhub76@gmail.com",
                 to: email,
                 subject: "Library Contact Confirmation",
                 html: `
@@ -460,37 +456,34 @@ app.get("/test-email", async (req, res) => {
 
     console.log("Testing email...");
 
-      const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    family: 4   // 🔥 FORCE IPv4 (THIS FIXES YOUR ERROR)
-  }
-});
+    const transporter = nodemailer.createTransport({
+        host: "smtp-relay.brevo.com",
+        port: 587,
+        secure: false,
+        auth: {
+            user: "a5aad3001@smtp-brevo.com",
+            pass: process.env.BREVO_PASS
+        }
+    });
+
     try {
         await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER,
+            from: "libraryhub76@gmail.com",
+            to: "digitallibrary67@gmail.com", // send to yourself
             subject: "Test Email",
-            text: "Working ✅"
+            text: "Brevo Working ✅"
         });
 
         console.log("✅ EMAIL SENT");
         res.send("Email sent ✅");
 
     } catch (error) {
-    console.log("❌ EMAIL ERROR FULL:", error);  // 👈 ADD THIS LINE
+        console.log("❌ EMAIL ERROR FULL:", error);
 
-    res.json({
-        message: "Saved but email failed"
-    });
-}
+        res.json({
+            message: "Email failed"
+        });
+    }
 });
 /* ================= START SERVER ================= */
 
